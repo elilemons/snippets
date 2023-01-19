@@ -12,15 +12,6 @@
 	// 	],
 	// 	"description": "Log output to console"
 	// }
-	"Print to console": {
-		"prefix": "cll",
-		"body": [
-			"// TODO Remove this test code",
-			"console.log('ELITEST$1', { $2 });$3",
-			"// ^ TODO Remove this test code",
-		],
-		"description": "Log output to console"
-	},
 	"React FC with CSS": {
 		"prefix": "rfc",
 		"body": [
