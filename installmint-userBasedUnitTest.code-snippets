@@ -1,0 +1,97 @@
+{
+	// Place your global snippets here. Each snippet is defined under a snippet name and has a scope, prefix, body and
+	// description. Add comma separated ids of the languages where the snippet is applicable in the scope field. If scope
+	// is left empty or omitted, the snippet gets applied to all languages. The prefix is what is
+	// used to trigger the snippet and the body will be expanded and inserted. Possible variables are:
+	// $1, $2 for tab stops, $0 for the final cursor position, and ${1:label}, ${2:another} for placeholders.
+	// Placeholders with the same ids are connected.
+	// Example:
+	// "Print to console": {
+	// 	"scope": "javascript,typescript",
+	// 	"prefix": "log",
+	// 	"body": [
+	// 		"console.log('$1');",
+	// 		"$2"
+	// 	],
+	// 	"description": "Log output to console"
+	// }
+	"Installmint - User Based Unit Test": {
+    "prefix": "iutu",
+		"scope": "typescript",
+    "body": [
+        "import {",
+        "  Admin,",
+        "\t${1:ModelName},",
+        "  DocWithToken,",
+        "  UserOnRequest,",
+        "} from \"@trbl/installmint-lib/dist\";",
+        "import { create${1:ModelName} } from \"../../../tests/helpers\";",
+        "import adminTestCredentials from \"../../Admins/tests/credentials\";",
+        "import { base${1:ModelName} } from \"./mock\";",
+        "import decodeJWT from \"jwt-decode\";",
+        "",
+        "require(\"isomorphic-fetch\");",
+        "let adminToken: string;",
+        "let new${1:ModelName}: DocWithToken< ${1:ModelName}>;",
+        "",
+        "describe(\"${1:ModelName}s\", () => {",
+        "  jest.setTimeout(15000);",
+        "  beforeAll(async () => {",
+        "\t const result: UserOnRequest<Admin> = await fetch(",
+        "\t\t`${process.env.PAYLOAD_PUBLIC_SERVER_URL}/api/admins/login`,",
+        "\t\t{",
+        "\t\t  method: \"post\",",
+        "\t\t  headers: {",
+        "\t\t\t \"Content-Type\": \"application/json\",",
+        "\t\t  },",
+        "\t\t  body: JSON.stringify({",
+        "\t\t\t email: adminTestCredentials.email,",
+        "\t\t\t password: adminTestCredentials.password,",
+        "\t\t  }),",
+        "\t\t}",
+        "\t ).then((res) => res.json());",
+        "",
+        "\t adminToken = result.token;",
+        "",
+        "\t new${1:ModelName} = await create${1:ModelName}(\"create-${1/(.*)/${1:/camelcase}/}-login-test\");",
+        "  });",
+        "",
+        "  it(\"should have accountType '${1/(.*)/${1:/camelcase}/}'\", async () => {",
+        "\t expect(new${1:ModelName}.doc.accountType).toBe(\"${1/(.*)/${1:/camelcase}/}s\");",
+        "  });",
+        "",
+        "  it(\"should have a stripe account ID\", async () => {",
+        "\t expect(new${1:ModelName}.doc.stripeDetails.accountID).toBeTruthy();",
+        "  });",
+        "",
+        "  it(\"should have a token\", async () => {",
+        "\t expect(new${1:ModelName}.doc.token).toBeTruthy();",
+        "  });",
+        "",
+        "  it(\"should allow a ${1/(.*)/${1:/camelcase}/} to log in\", async () => {",
+        "\t const result: UserOnRequest< ${1:ModelName}> = await fetch(",
+        "\t\t`${process.env.PAYLOAD_PUBLIC_SERVER_URL}/api/${1/(.*)/${1:/camelcase}/}s/login`,",
+        "\t\t{",
+        "\t\t  method: \"post\",",
+        "\t\t  headers: {",
+        "\t\t\t \"Content-Type\": \"application/json\",",
+        "\t\t  },",
+        "\t\t  body: JSON.stringify({",
+        "\t\t\t email: new${1:ModelName}.doc.email,",
+        "\t\t\t password: base${1:ModelName}.password,",
+        "\t\t  }),",
+        "\t\t}",
+        "\t ).then((res) => res.json());",
+        "\t const { email: resultEmail }: { email: string } = decodeJWT(result.token);",
+        "\t const { email: new${1:ModelName}Email }: { email: string } = decodeJWT(",
+        "\t\tnew${1:ModelName}.doc.token",
+        "\t );",
+        "",
+        "\t expect(typeof result.token).toBe(\"string\");",
+        "",
+        "\t expect(resultEmail).toBe(new${1:ModelName}Email);",
+        "  });",
+        "});"
+    ]
+}
+}
