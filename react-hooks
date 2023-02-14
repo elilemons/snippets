@@ -15,7 +15,6 @@
 	// 	],
 	// 	"description": "Log output to console"
 	// }
-
 	"Payload beforeChange hook": {
 		"prefix": "bch",
 		"body": [
